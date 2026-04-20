@@ -1,6 +1,6 @@
 {
   "name": "nestjs-boilerplate",
-  "version": "0.0.4",
+  "version": "0.1.4",
   "description": "A boilerplate that works as a starting point for NestJS projects, with a focus on authentication and authorization using JWT and Prisma.",
   "author": "vinicius-lima-barbosa",
   "private": true,

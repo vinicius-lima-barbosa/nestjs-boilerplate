@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -23,8 +24,20 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new PrismaExceptionFilter(), new HttpExceptionFilter());
 
+  const config = new DocumentBuilder()
+    .setTitle('Nestjs Boilerplate')
+    .setDescription('A boilerplate that works')
+    .setVersion('0.0.1')
+    .build();
+
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, documentFactory);
+
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0').then(() => {
-    console.log(`🚀 Server is running on port ${process.env.PORT ?? 3000}`);
+    console.log(
+      `🚀 Server is running on port ${process.env.PORT ?? 3000}\n📚 Swagger documentation is available at /docs\n🛠️  Environment: ${process.env.NODE_ENV ?? 'development'}
+      `,
+    );
   });
 }
 void bootstrap();

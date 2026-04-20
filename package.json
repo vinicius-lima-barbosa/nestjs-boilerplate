@@ -1,8 +1,8 @@
 {
   "name": "nestjs-boilerplate",
-  "version": "0.0.2",
-  "description": "",
-  "author": "",
+  "version": "0.0.3",
+  "description": "A boilerplate that works as a starting point for NestJS projects, with a focus on authentication and authorization using JWT and Prisma.",
+  "author": "vinicius-lima-barbosa",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -30,6 +30,7 @@
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.3.0",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "bcrypt": "^6.0.0",

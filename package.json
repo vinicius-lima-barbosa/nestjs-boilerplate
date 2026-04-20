@@ -1,6 +1,6 @@
 {
   "name": "nestjs-boilerplate",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A boilerplate that works as a starting point for NestJS projects, with a focus on authentication and authorization using JWT and Prisma.",
   "author": "vinicius-lima-barbosa",
   "private": true,
@@ -17,11 +17,15 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint-staged": "lint-staged --config .lintstagedrc.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "husky",
+    "commitlint": "commitlint"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -61,7 +65,9 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^17.0.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.0",
+    "lint-staged": "^16.2.6",
     "prettier": "^3.4.2",
     "prisma": "^7.7.0",
     "source-map-support": "^0.5.21",

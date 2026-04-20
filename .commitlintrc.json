@@ -1,0 +1,11 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "type-enum": [0],
+    "type-empty": [0],
+    "scope-empty": [0],
+    "subject-empty": [0],
+    "subject-case": [0],
+    "header-max-length": [1, "always", 120]
+  }
+}

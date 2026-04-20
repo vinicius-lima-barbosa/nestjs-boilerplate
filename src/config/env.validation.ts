@@ -13,4 +13,13 @@ export const envValidationSchema = Joi.object({
   JWT_REFRESH_SECRET: Joi.string().min(16).required(),
   JWT_ACCESS_EXPIRES_IN: Joi.number().integer().positive().default(900),
   JWT_REFRESH_EXPIRES_IN: Joi.number().integer().positive().default(604800),
+  AUTH_COOKIE_SECURE: Joi.boolean().default(false),
+  AUTH_COOKIE_SAME_SITE: Joi.string()
+    .valid('lax', 'strict', 'none')
+    .default('lax'),
+  AUTH_ACCESS_COOKIE_MAX_AGE: Joi.number().integer().positive().default(900000),
+  AUTH_REFRESH_COOKIE_MAX_AGE: Joi.number()
+    .integer()
+    .positive()
+    .default(604800000),
 });

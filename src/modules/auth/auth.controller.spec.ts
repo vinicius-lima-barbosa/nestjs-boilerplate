@@ -4,11 +4,13 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 describe('AuthController', () => {
+  const registerMock = jest.fn();
   const loginMock = jest.fn();
   const refreshMock = jest.fn();
   const logoutMock = jest.fn();
 
   const authServiceMock = {
+    register: registerMock,
     login: loginMock,
     refresh: refreshMock,
     logout: logoutMock,
@@ -31,6 +33,44 @@ describe('AuthController', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     controller = new AuthController(authServiceMock, configServiceMock);
+  });
+
+  it('should be auth cookies on register', async () => {
+    const cookie = jest.fn();
+    const clearCookie = jest.fn();
+    const response = { cookie, clearCookie } as unknown as Response;
+
+    authServiceMock.register.mockResolvedValue({
+      accessToken: 'access-token',
+      refreshToken: 'refresh-token',
+      user: {
+        id: 'user-id',
+        name: 'John',
+        email: 'john@example.com',
+        role: 'USER',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    const registerResponse = await controller.register(
+      { name: 'John', email: 'john@example.com', password: '12345678' },
+      response,
+    );
+
+    expect(registerResponse.user.id).toBe('user-id');
+    expect(cookie).toHaveBeenNthCalledWith(
+      1,
+      'access_token',
+      'access-token',
+      expect.objectContaining({ path: '/' }),
+    );
+    expect(cookie).toHaveBeenNthCalledWith(
+      2,
+      'refresh_token',
+      'refresh-token',
+      expect.objectContaining({ path: '/auth/refresh' }),
+    );
   });
 
   it('should set auth cookies on login', async () => {

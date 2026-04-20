@@ -15,6 +15,7 @@ describe('AuthService', () => {
   let service: AuthService;
 
   const usersServiceMock = {
+    create: jest.fn(),
     validateCredentials: jest.fn(),
     updateRefreshTokenHash: jest.fn(),
     findRawById: jest.fn(),
@@ -55,6 +56,46 @@ describe('AuthService', () => {
       jwtServiceMock,
       configServiceMock,
     );
+  });
+
+  it('should register user and return tokens', async () => {
+    const hashMock = bcrypt.hash as jest.Mock;
+
+    usersServiceMock.create.mockResolvedValue(user);
+    jwtServiceMock.signAsync
+      .mockResolvedValueOnce('access-token')
+      .mockResolvedValueOnce('refresh-token');
+    hashMock.mockResolvedValue('hashed-refresh');
+    usersServiceMock.updateRefreshTokenHash.mockResolvedValue();
+
+    const result = await service.register({
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: '12345678',
+    });
+
+    expect(
+      usersServiceMock.create.mockResolvedValue(user),
+    ).toHaveBeenCalledWith({
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: '12345678',
+      role: UserRole.USER,
+    });
+
+    expect(
+      jwtServiceMock.signAsync
+        .mockResolvedValueOnce('access-token')
+        .mockResolvedValueOnce('refresh-token'),
+    ).toHaveBeenCalledTimes(2);
+    expect(hashMock).toHaveBeenCalledWith('refresh-token', 10);
+    expect(
+      usersServiceMock.updateRefreshTokenHash.mockResolvedValue(),
+    ).toHaveBeenCalledWith(user.id, 'hashed-refresh');
+
+    expect(result.accessToken).toBe('access-token');
+    expect(result.refreshToken).toBe('refresh-token');
+    expect(result.user.email).toBe(user.email);
   });
 
   it('should return tokens on valid login', async () => {
